@@ -1,8 +1,18 @@
 # columnar transposition cipher
 pt = input('\nEnter Plain Text: ')
-key = input('Enter Key: ')
+keyword = input('Enter Keyword: ')
 
-def encrypt(pt, key):
+def simplifyKey(keyword):
+    # converting the string to list
+    ar = [ord(char) for char in keyword]
+    # sorting the list first and getting their indices as ranks
+    ranks = [sorted(ar).index(x)+1 for x in ar]
+    # converting list elements to string and then joining them
+    key = ''.join(map(str, ranks))
+    return key
+
+def encrypt(pt, keyword):
+    key = simplifyKey(keyword)
     pt = pt.replace(" ", "").upper()
     while len(pt)%len(key) != 0:
         pt += 'Z'
@@ -25,7 +35,8 @@ def encrypt(pt, key):
             cipher += table[j][value]
     return cipher
 
-def decrypt(cipher, key): 
+def decrypt(cipher, keyword):
+    key = simplifyKey(keyword) 
     # creating a dictionary for key values and its index and sorting it
     key_dict = {}
     for i, n in enumerate([int(char) for char in key]): 
@@ -46,9 +57,9 @@ def decrypt(cipher, key):
             pt += c
     return pt
 
-cipher = encrypt(pt, key)
+cipher = encrypt(pt, keyword)
 print('Encrypted Cipher: ', cipher)
-newPt = decrypt(cipher, key)
+newPt = decrypt(cipher, keyword)
 print('Decrypted Text: ', newPt, '\n')
 
 
